@@ -10,27 +10,40 @@ import XCTest
 
 final class ehmTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testTimeEntryJSONDecoder() throws {
+        let decoder = JSONDecoder()
+        let timeEntry = try decoder.decode(RedmineTimeEntry.self, from: testFeature_te01)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        XCTAssertEqual(timeEntry.id, 163582)
+        XCTAssertEqual(timeEntry.project.name, "renovero")
+        XCTAssertEqual(timeEntry.activity.name, "Entwicklung")
+        XCTAssertEqual(timeEntry.hours, 2.67)
+        XCTAssertEqual(timeEntry.comment, "REN-4021")
+        XCTAssertEqual(timeEntry.date, dateFormatter.date(from: "2023-01-27"))
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func testTimeEntriesResultJSONDecoder() throws {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let result = try decoder.decode(RedmineTimeEntriesResult.self, from: testFeature_te02)
+        
+        XCTAssertEqual(result.entries.count, 2)
+        XCTAssertEqual(result.totalCount, 369)
+        XCTAssertEqual(result.limit, 2)
+        XCTAssertEqual(result.offset, 10)
+        
+        XCTAssertEqual(result.entries[0].id, 163582)
+        XCTAssertEqual(result.entries[1].id, 163581)
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    func testHTTPClientFetchTimeEntries() async throws {
+        let fakeDownloader = FakeRedmineDownloader()
+        let client = RedmineHTTPClient(downloader: fakeDownloader)
+        let timeEntries = try await client.timeEntries
+        
+        XCTAssertEqual(timeEntries.count, 2)
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }
