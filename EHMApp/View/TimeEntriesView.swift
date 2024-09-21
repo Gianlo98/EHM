@@ -66,7 +66,7 @@ extension TimeEntriesView {
     }
     
     func getSummedHours(timeEntries: [RedmineTimeEntry]) -> String {
-        return timeEntries.reduce(0) { $0 + $1.hours }.formatted(.number.precision(.fractionLength(2)))
+        return TimeEntryUtils.formatHours(timeEntries.reduce(0) { $0 + $1.hours })
     }
 }
 

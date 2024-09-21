@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 class RedmineHTTPClient {
     private let downloader: any RedmineDownloader
@@ -26,6 +27,8 @@ class RedmineHTTPClient {
             guard redmineUrl != "" else {
                 throw RedmineError.missingCredentials
             }
+            
+            Logger.providerLogger.debug("[RedmineHTTPClient] Fetching from redmine url \(self.redmineUrl, privacy: .private)")
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -60,13 +63,22 @@ class RedmineHTTPClient {
     
     var currentUser: RedmineCurrentUser {
         get async throws {
-            guard redmineUrl != "" else {
+            // Check if the Redmine URL is empty
+            guard !redmineUrl.isEmpty else {
                 throw RedmineError.missingCredentials
             }
             
-            let url = URL(string: "\(redmineUrl)/users/current.json")!
+            // Safely unwrap the URL
+            guard let url = URL(string: "\(redmineUrl)/users/current.json") else {
+                throw RedmineError.invalidUrl
+            }
+            
+            // Attempt to fetch data from the URL
             let data = try await downloader.fetch(from: url)
+            
+            // Decode the data into a RedmineCurrentUser object
             let currentUserResult = try decoder.decode(RedmineCurrentUser.self, from: data)
+            
             return currentUserResult
         }
     }

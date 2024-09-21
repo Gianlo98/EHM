@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 @MainActor
 class RedmineTimeEntriesProvider: ObservableObject {
@@ -19,6 +20,8 @@ class RedmineTimeEntriesProvider: ObservableObject {
     var client: RedmineHTTPClient
     
     func fetchTimeEntries() async throws {
+        Logger.providerLogger.debug("[RedmineTimeEntriesProvider] Fetching entries")
+
         let fetchedEntries = try await client.timeEntries
         self.timeEntries = fetchedEntries
         self.groupedTimeEntries = groupTimeEntries(ungroupedTimeEntries: fetchedEntries)

@@ -96,7 +96,7 @@ struct SettingsView: View {
                         TextField("Hourly Income", value: $monthlyHourTreshold, format: .number)
                             .keyboardType(.decimalPad)
                             .onChange(of: monthlyHourTreshold) {
-                                UserDefaults.standard.set(monthlyHourTreshold, forKey: "monthlyHourTreshold")
+                                UserDefaults.standard.set(monthlyHourTreshold, forKey: "monthlyHourThreshold")
                             }
                     }
                     

@@ -18,15 +18,13 @@ struct ChartView: View {
     @State var hourlyWage: Double = 0
     @State var todayHours: Double = 0
     @State var monthHours: Double = 160
-    @State var monhtlyThreshold: Double = UserDefaults.standard.double(forKey: "monthlyHourTreshold")
+    @State var monhtlyThreshold: Double = UserDefaults.standard.double(forKey: "monthlyHourThreshold")
     
     var body: some View {
-        let daysInMonth = daysInCurrentMonth()
-        let workingDaysPassed = workingDaysPassedInMonth()
-        let workingDaysLeft = daysInMonth - workingDaysPassed
-        let hoursNeeded = max(monhtlyThreshold - monthHours, 0)
-        let averageHoursPerDay = workingDaysLeft > 0 ? hoursNeeded / Double(workingDaysLeft) : 0
-        
+        let (workingDaysLeft, averageHoursPerDay) = TimeEntryUtils.getAverageHoursPerDayToReachMonthlyThreshold(
+            monthlyThreshold: monhtlyThreshold,
+            monthHours: monthHours
+        )
         
         VStack {
             ZStack {
@@ -84,52 +82,12 @@ struct ChartView: View {
             await fetchTimeEntries()
         }.onAppear() {
             NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { _ in
-                self.monhtlyThreshold = UserDefaults.standard.double(forKey: "monthlyHourTreshold")
+                self.monhtlyThreshold = UserDefaults.standard.double(forKey: "monthlyHourThreshold")
             }
         }
         .onDisappear {
             NotificationCenter.default.removeObserver(self, name: UserDefaults.didChangeNotification, object: nil)
         }
-    }
-    
-    
-    func daysInCurrentMonth() -> Int {
-        let calendar = Calendar.current
-        let range = calendar.range(of: .day, in: .month, for: Date())!
-        let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: Date()))!
-        let weekdays = Set([2, 3, 4, 5, 6]) // Monday to Friday
-        
-        var workingDays = 0
-        for day in range {
-            if let date = calendar.date(byAdding: .day, value: day - 1, to: firstDayOfMonth),
-               let weekday = calendar.dateComponents([.weekday], from: date).weekday,
-               weekdays.contains(weekday) {
-                workingDays += 1
-            }
-        }
-        
-        return workingDays
-    }
-    
-    // Calculate the number of working days passed in the month up to the current date
-    func workingDaysPassedInMonth() -> Int {
-        let calendar = Calendar.current
-        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: Calendar.current.startOfDay(for: Date())))!
-        let today = calendar.startOfDay(for: Date())
-        let weekdays = Set([2, 3, 4, 5, 6]) // Assuming working days are Monday to Friday (1 = Sunday, 7 = Saturday)
-        
-        let days = calendar.dateComponents([.day], from: startOfMonth, to: today).day!
-        var workingDays = 0
-        
-        for day in 0...days {
-            if let date = calendar.date(byAdding: .day, value: day, to: startOfMonth),
-               let weekday = calendar.dateComponents([.weekday], from: date).weekday,
-               weekdays.contains(weekday) {
-                workingDays += 1
-            }
-        }
-        
-        return workingDays
     }
     
 }

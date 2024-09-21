@@ -12,6 +12,7 @@ enum RedmineError: Error {
     case networkError(comment: String)
     case keychainError
     case missingCredentials
+    case invalidUrl
     case unexpectedError(error: Error)
 }
 
@@ -20,6 +21,8 @@ extension RedmineError: LocalizedError {
         switch self {
         case .missingData:
             return NSLocalizedString("Data error", comment: "")
+        case .invalidUrl:
+            return NSLocalizedString("Invalid redmine URL", comment: "")
         case .networkError(let comment):
             return NSLocalizedString("Network error", comment: comment)
         case .keychainError:
