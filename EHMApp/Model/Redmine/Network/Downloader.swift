@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import OSLog
+
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
@@ -34,6 +36,8 @@ extension URLSession: RedmineDownloader {
               validStatus.contains(response.statusCode) else {
             throw RedmineError.networkError(comment: "Request to \(url) went wrong")
         }
+        
+        Logger.providerLogger.debug("Request to \(url) returned with status code \(response.statusCode)")
         
         return data
     }

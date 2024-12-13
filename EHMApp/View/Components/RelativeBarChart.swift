@@ -12,35 +12,29 @@ import Charts
 struct RelativeBarChart: View {
     @Binding var chartData: [GroupedTimeEntry]
     
-    @State private var showSelectionBar = false
-    @State private var offsetX = 0.0
-    @State private var offsetY = 0.0
-    @State private var selectedDay = ""
-    @State private var selectedMins = 0
 
     var body: some View {
-        VStack{
-            Chart (chartData, id: \.date) { element in
+        VStack {
+            // Chart showing grouped time entries
+            Chart(chartData, id: \.date) { element in
                 BarMark(
                     x: .value("Date", element.date, unit: .day),
                     y: .value("Hours", element.value)
                 )
                 .accessibilityLabel(element.date.formatted(date: .complete, time: .omitted))
                 .foregroundStyle(getElementColor(element: element))
-                RuleMark(
-                    y: .value("Average", getAverage(data: chartData))
-                )
-                .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [4, 5]))
                 
-                .foregroundStyle(.gray)
-                .annotation(position: .trailing, alignment: .leading) {
-                    Text("avg")
-                        .font(.caption2)
-                        .foregroundStyle(.gray)
-                }
-                
-                
-            }.chartYAxis {
+                // RuleMark for average line
+                RuleMark(y: .value("Average", getAverage(data: chartData)))
+                    .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [4, 5]))
+                    .foregroundStyle(.gray)
+                    .annotation(position: .trailing, alignment: .leading) {
+                        Text("avg")
+                            .font(.caption2)
+                            .foregroundStyle(.gray)
+                    }
+            }
+            .chartYAxis {
                 AxisMarks(position: .leading, values: .automatic) { value in
                     AxisGridLine(centered: true, stroke: StrokeStyle(lineWidth: 1))
                     AxisValueLabel() {
@@ -52,53 +46,6 @@ struct RelativeBarChart: View {
                 }
             }
             .frame(height: 200)
-            .chartOverlay { pr in
-                GeometryReader { geoProxy in
-                                        Rectangle().foregroundStyle(Color.orange.gradient)
-                                            .frame(width: 2, height: geoProxy.size.height * 0.95)
-                                            .opacity(showSelectionBar ? 1.0 : 0.0)
-                                            .offset(x: offsetX)
-                                        
-                                        Capsule()
-                                            .foregroundStyle(.orange.gradient)
-                                            .frame(width: 100, height: 50)
-                                            .overlay {
-                                                VStack {
-                                                    Text("\(selectedDay)")
-                                                    Text("\(selectedMins) mins")
-                                                        .font(.title2)
-                                                }
-                                                .foregroundStyle(.white.gradient)
-                                            }
-                                            .opacity(showSelectionBar ? 1.0 : 0.0)
-                                            .offset(x: offsetX - 50, y: offsetY - 50)
-                                        
-                                        Rectangle().fill(.clear).contentShape(Rectangle())
-                                            .gesture(DragGesture().onChanged { value in
-                                                if !showSelectionBar {
-                                                    showSelectionBar = true
-                                                }
-                                                let origin = geoProxy[pr.plotFrame!].origin
-                                                let location = CGPoint(
-                                                    x: value.location.x - origin.x,
-                                                    y: value.location.y - origin.y
-                                                )
-                                                offsetX = location.x
-                                                offsetY = location.y
-                                                
-                                                let (day, _) = pr.value(at: location, as: (String, Int).self) ?? ("-", 0)
-//                                                let mins = chartData..first { w in
-//                                                    w.day.lowercased() == day.lowercased()
-//                                                }?.minutes ?? 0
-                                                selectedDay = day
-//                                                selectedMins = mins
-                                            }
-                                            .onEnded({ _ in
-                                                showSelectionBar = false
-                                            }))
-                }
-                
-            }
             .padding(.trailing, 20)
         }
     }
@@ -139,3 +86,4 @@ func getAverage(data: [GroupedTimeEntry]) -> Double {
     
     return hoursTotal / Double(countTotal)
 }
+

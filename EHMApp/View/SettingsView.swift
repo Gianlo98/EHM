@@ -29,7 +29,7 @@ struct SettingsView: View {
     @State private var monthlyHourTreshold: Double = 165
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 List{
                     
@@ -53,7 +53,9 @@ struct SettingsView: View {
                     
                     Section {
                         TextField("URL", text: $redmineApiUrl)
+                            #if os(iOS)
                             .autocapitalization(.none)
+                            #endif
                             .onChange(of: redmineApiUrl) {
                                 UserDefaults.standard.set(redmineApiUrl, forKey: "redmineApiUrl")
                                 attemptFetchCurrentUser()
@@ -78,31 +80,25 @@ struct SettingsView: View {
                     }
                     
                     Section("Fixed cost treshold") {
-                        TextField("Fixed cost treshold", value: $fixedCostTreshold, format: .currency(code: "CHF"))
-                            .keyboardType(.decimalPad)
-                            .onChange(of: fixedCostTreshold) {
-                                UserDefaults.standard.set(fixedCostTreshold, forKey: "fixedCostTreshold")
-                            }
+                        DecimalTextField(value: $fixedCostTreshold, placeholder: "Fixed cost treshold")
                     }
                     Section("Hourly Income") {
-                        TextField("Hourly Income", value: $hourlyIncome, format: .currency(code: "CHF"))
-                            .keyboardType(.decimalPad)
-                            .onChange(of: hourlyIncome) {
-                                UserDefaults.standard.set(hourlyIncome, forKey: "hourlyIncome")
-                            }
+                        DecimalTextField(value: $hourlyIncome, placeholder: "Hourly Income")
                     }
-                    
                     Section("Monthly hours treshold") {
-                        TextField("Hourly Income", value: $monthlyHourTreshold, format: .number)
-                            .keyboardType(.decimalPad)
-                            .onChange(of: monthlyHourTreshold) {
-                                UserDefaults.standard.set(monthlyHourTreshold, forKey: "monthlyHourThreshold")
-                            }
+                        DecimalTextField(value: $monthlyHourTreshold, placeholder: "Hourly Income")
                     }
                     
-                }.listStyle(.insetGrouped)
+                }
+                #if os(iOS)
+                .listStyle(.insetGrouped)
+                #endif
+                
             }
-            .navigationTitle("Settings").navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Settings")
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
         }.onAppear {
             loadSettings()
         }

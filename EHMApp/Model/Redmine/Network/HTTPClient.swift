@@ -68,6 +68,7 @@ class RedmineHTTPClient {
                 throw RedmineError.missingCredentials
             }
             
+            Logger.providerLogger.debug("Fetching current user from \(self.redmineUrl)")
             // Safely unwrap the URL
             guard let url = URL(string: "\(redmineUrl)/users/current.json") else {
                 throw RedmineError.invalidUrl

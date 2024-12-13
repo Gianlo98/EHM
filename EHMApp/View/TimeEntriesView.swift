@@ -18,7 +18,7 @@ struct TimeEntriesView : View {
     
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 List {
                     ForEach(groupedTimeEntries.sorted(by: { $0.key.compare($1.key) == .orderedDescending }), id: \.key) { key, value in
@@ -33,7 +33,7 @@ struct TimeEntriesView : View {
                         }
                     }
                 }
-                .navigationTitle("Activities")
+                .navigationTitle("Time Entries")
                 .refreshable {
                     await fetchTimeEntries()
                 }

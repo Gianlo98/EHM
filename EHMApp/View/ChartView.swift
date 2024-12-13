@@ -20,6 +20,15 @@ struct ChartView: View {
     @State var monthHours: Double = 160
     @State var monhtlyThreshold: Double = UserDefaults.standard.double(forKey: "monthlyHourThreshold")
     
+    #if os(iOS)
+    let backgroundColor = Color(UIColor.secondarySystemBackground)
+    let screenWidth = UIScreen.main.bounds.size.width
+    #elseif os(macOS)
+    let screenWidth = NSApplication.shared.windows.first?.frame.size.width ?? 0
+    let backgroundColor = Color(NSColor.windowBackgroundColor)
+    #endif
+    
+    
     var body: some View {
         let (workingDaysLeft, averageHoursPerDay) = TimeEntryUtils.getAverageHoursPerDayToReachMonthlyThreshold(
             monthlyThreshold: monhtlyThreshold,
@@ -29,7 +38,7 @@ struct ChartView: View {
         VStack {
             ZStack {
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
-                    .fill(Color(UIColor.secondarySystemBackground))
+                    .fill(Color(backgroundColor))
                 
                 VStack {
                     HStack {
@@ -45,14 +54,14 @@ struct ChartView: View {
                     AbsoluteLineChart(chartData: $timeEntriesProvider.summedTimeEntries)
                 }
             }.padding()
-                .frame(width: UIScreen.main.bounds.size.width)
+                .frame(width: screenWidth)
                 .scaledToFit()
             
             Spacer()
             
             ZStack {
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
-                    .fill(Color(UIColor.secondarySystemBackground))
+                    .fill(Color(backgroundColor))
                 
                 VStack {
                     HStack {
@@ -71,7 +80,7 @@ struct ChartView: View {
                     RelativeBarChart(chartData:  $timeEntriesProvider.groupedTimeEntries)
                 }
             }.padding()
-                .frame(width: UIScreen.main.bounds.size.width)
+                .frame(width: screenWidth)
                 .scaledToFit()
             
             Spacer()
