@@ -4,13 +4,46 @@
 //
 //  Created by Gianlo Personal on 01.10.2024.
 //
-
 import SwiftUI
-import UIKit
 
-struct DecimalTextField: UIViewRepresentable {
+struct DecimalTextField: View {
     @Binding var value: Double
     var placeholder: String
+
+    #if os(iOS)
+    var body: some View {
+        DecimalTextFieldUIKit(value: $value, placeholder: placeholder)
+    }
+    #else
+    var body: some View {
+        DecimalTextFieldAppKit(value: $value, placeholder: placeholder)
+    }
+    #endif
+}
+
+#if os(iOS)
+import UIKit
+
+struct DecimalTextFieldUIKit: UIViewRepresentable {
+    @Binding var value: Double
+    var placeholder: String
+
+    func makeUIView(context: Context) -> UITextField {
+        let textField = UITextField()
+        textField.placeholder = placeholder
+        textField.keyboardType = .decimalPad
+        textField.delegate = context.coordinator
+        textField.addDoneButtonOnKeyboard()
+        return textField
+    }
+
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        uiView.text = String(format: "%.2f", value)
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(value: $value)
+    }
 
     class Coordinator: NSObject, UITextFieldDelegate {
         @Binding var value: Double
@@ -20,55 +53,67 @@ struct DecimalTextField: UIViewRepresentable {
         }
 
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            // Allow only numbers and one decimal separator
-            let allowedCharacters = CharacterSet(charactersIn: "0123456789.")
+            // Allow numbers, one decimal separator, and locale-aware formatting
+            let formatter = NumberFormatter()
+            formatter.locale = Locale.current
+            let decimalSeparator = formatter.decimalSeparator ?? "."
+            let allowedCharacters = CharacterSet(charactersIn: "0123456789\(decimalSeparator)")
             let characterSet = CharacterSet(charactersIn: string)
             return allowedCharacters.isSuperset(of: characterSet)
         }
 
         func textFieldDidEndEditing(_ textField: UITextField) {
-            if let text = textField.text, let number = Double(text) {
+            if let text = textField.text,
+               let number = NumberFormatter().number(from: text)?.doubleValue {
                 value = number
             }
         }
 
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder() // Dismiss the keyboard
+            textField.resignFirstResponder()
             return true
         }
     }
+}
+#endif
 
-    func makeCoordinator() -> Coordinator {
-        return Coordinator(value: $value)
-    }
+#if os(macOS)
+import AppKit
 
-    func makeUIView(context: Context) -> UITextField {
-        let textField = UITextField()
-        textField.placeholder = placeholder
-        textField.keyboardType = .decimalPad
+struct DecimalTextFieldAppKit: NSViewRepresentable {
+    @Binding var value: Double
+    var placeholder: String
+
+    func makeNSView(context: Context) -> NSTextField {
+        let textField = NSTextField()
+        textField.placeholderString = placeholder
         textField.delegate = context.coordinator
-        textField.addDoneButtonOnKeyboard() // Add "Done" button
+        textField.isBezeled = true
+        textField.bezelStyle = .roundedBezel
         return textField
     }
 
-    func updateUIView(_ uiView: UITextField, context: Context) {
-        uiView.text = String(format: "%.2f", value)
+    func updateNSView(_ nsView: NSTextField, context: Context) {
+        nsView.stringValue = String(format: "%.2f", value)
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(value: $value)
+    }
+
+    class Coordinator: NSObject, NSTextFieldDelegate {
+        @Binding var value: Double
+
+        init(value: Binding<Double>) {
+            _value = value
+        }
+
+        func controlTextDidEndEditing(_ obj: Notification) {
+            if let textField = obj.object as? NSTextField,
+               let number = NumberFormatter().number(from: textField.stringValue)?.doubleValue {
+                value = number
+            }
+        }
     }
 }
-
-extension UITextField {
-    func addDoneButtonOnKeyboard() {
-        let toolbar: UIToolbar = UIToolbar()
-        toolbar.sizeToFit()
-
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
-
-        toolbar.setItems([flexSpace, doneButton], animated: false)
-        self.inputAccessoryView = toolbar
-    }
-
-    @objc func doneButtonAction() {
-        self.resignFirstResponder()
-    }
-}
+#endif
