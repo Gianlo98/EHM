@@ -23,9 +23,9 @@ class SettingsViewModel: ObservableObject {
         let keychain = KeychainSwift()
         self.redmineApiKey = keychain.get("redmineApiKey") ?? ""
         self.redmineApiUrl = UserDefaults.standard.string(forKey: "redmineApiUrl") ?? ""
-        self.fixedCostTreshold = UserDefaults.standard.double(forKey: "fixedCostTreshold")
+        self.fixedCostTreshold = UserDefaults.standard.double(forKey: "fixedCostThreshold")
         self.hourlyIncome = UserDefaults.standard.double(forKey: "hourlyIncome")
-        self.monthlyHourTreshold = UserDefaults.standard.double(forKey: "monthlyHourTreshold")
+        self.monthlyHourTreshold = UserDefaults.standard.double(forKey: "monthlyHourThreshold")
     }
 
     func attemptFetchCurrentUser(timeEntriesProvider: RedmineTimeEntriesProvider) {

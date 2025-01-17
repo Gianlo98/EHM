@@ -46,7 +46,7 @@ struct SettingsView_iOS: View {
                 Section("Fixed Cost Threshold") {
                     DecimalTextField(value: $viewModel.fixedCostTreshold, placeholder: "Fixed Cost Threshold")
                         .onChange(of: viewModel.fixedCostTreshold, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "fixedCostTreshold")
+                            UserDefaults.standard.set(newValue, forKey: "fixedCostThreshold")
                         }
                 }
                 
@@ -60,7 +60,7 @@ struct SettingsView_iOS: View {
                 Section("Monthly Hours Threshold") {
                     DecimalTextField(value: $viewModel.monthlyHourTreshold, placeholder: "Monthly Hours Threshold")
                         .onChange(of: viewModel.monthlyHourTreshold, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "monthlyHourTreshold")
+                            UserDefaults.standard.set(newValue, forKey: "monthlyHourThreshold")
                         }
                 }
             }

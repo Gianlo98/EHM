@@ -66,7 +66,7 @@ struct SettingsView_macOS: View {
                     Text("Fixed Cost Threshold:")
                     TextField("", value: $viewModel.fixedCostTreshold, format: .currency(code: "CHF"))
                         .onChange(of: viewModel.fixedCostTreshold, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "fixedCostTreshold")
+                            UserDefaults.standard.set(newValue, forKey: "fixedCostThreshold")
                         }
                 }
                 
@@ -82,7 +82,7 @@ struct SettingsView_macOS: View {
                     Text("Monthly Hours Threshold:")
                     TextField("", value: $viewModel.monthlyHourTreshold, format: .number)
                         .onChange(of: viewModel.monthlyHourTreshold, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "monthlyHourTreshold")
+                            UserDefaults.standard.set(newValue, forKey: "monthlyHourThreshold")
                         }
                 }
             }

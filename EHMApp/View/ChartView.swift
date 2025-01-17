@@ -17,16 +17,16 @@ struct ChartView: View {
     
     @State var hourlyWage: Double = 0
     @State var todayHours: Double = 0
-    @State var monthHours: Double = 160
-    @State var monhtlyThreshold: Double = UserDefaults.standard.double(forKey: "monthlyHourThreshold")
+    @State var monthHours: Double = 0
+    @State var monhtlyThreshold: Double = 0
     
-    #if os(iOS)
+#if os(iOS)
     let backgroundColor = Color(UIColor.secondarySystemBackground)
     let screenWidth = UIScreen.main.bounds.size.width
-    #elseif os(macOS)
+#elseif os(macOS)
     let screenWidth = NSApplication.shared.windows.first?.frame.size.width ?? 0
     let backgroundColor = Color(NSColor.windowBackgroundColor)
-    #endif
+#endif
     
     
     var body: some View {
@@ -86,12 +86,16 @@ struct ChartView: View {
             Spacer()
             Spacer()
         }.refreshable {
+            reloadSettings()
             await fetchTimeEntries()
-        }.task {
+        }
+        .task {
+            reloadSettings()
             await fetchTimeEntries()
-        }.onAppear() {
+        }.onAppear {
+            reloadSettings()
             NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { _ in
-                self.monhtlyThreshold = UserDefaults.standard.double(forKey: "monthlyHourThreshold")
+                reloadSettings()
             }
         }
         .onDisappear {
@@ -116,13 +120,30 @@ extension ChartView {
         do {
             try await timeEntriesProvider.fetchTimeEntries()
             
-            self.hourlyWage = UserDefaults.standard.double(forKey: "hourlyIncome")
             self.todayHours = self.timeEntriesProvider.groupedTimeEntries.last?.value ?? 0.0
             self.monthHours = self.timeEntriesProvider.summedTimeEntries.last?.value ?? 0.0
+            
+            #if DEBUG
+            print("todayHours: \(self.todayHours)")
+            print("monthHours: \(self.monthHours)")
+            #endif
+            
         } catch {
             //            self.hasError = true
         }
         isLoading = false
+    }
+    
+    func reloadSettings() {
+        self.monhtlyThreshold = UserDefaults.standard.double(forKey: "monthlyHourThreshold")
+        self.hourlyWage = UserDefaults.standard.double(forKey: "hourlyIncome")
+        
+        
+        // log values
+        #if DEBUG
+        print("monthlyThreshold: \(self.monhtlyThreshold)")
+        print("hourlyWage: \(self.hourlyWage)")
+        #endif
     }
 }
 

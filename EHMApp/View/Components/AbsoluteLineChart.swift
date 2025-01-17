@@ -14,8 +14,8 @@ struct AbsoluteLineChart: View {
     @State private var lineWidth = 2.0
     @State private var chartColor: Color = .blue
     @State private var showSymbols = false
-    @State private var fixedCosts = UserDefaults.standard.integer(forKey: "fixedCostTreshold")
-    @State private var hourlyIncome = UserDefaults.standard.double(forKey: "hourlyIncome")
+    @State private var fixedCosts: Double = 0
+    @State private var hourlyIncome: Double = 0
     
     var body: some View {
         let maxValue = chartData.max(by: { $0.value < $1.value })?.value ?? 0
@@ -31,9 +31,6 @@ struct AbsoluteLineChart: View {
                 .lineStyle(StrokeStyle(lineWidth: lineWidth))
                 .foregroundStyle(chartColor.gradient)
                 .interpolationMethod(.cardinal)
-                .symbol(Circle().strokeBorder(lineWidth: lineWidth))
-                .symbolSize(showSymbols ? 60 : 0)
-                
             }
             
             if fixedCosts != 0 {
@@ -65,10 +62,15 @@ struct AbsoluteLineChart: View {
         .chartYScale(domain: 0...yAxisUpperBound)
         .frame(height: 200)
         .padding()
-        .onAppear {
+        .refreshable {
+            reloadSettings()
+        }
+        .task {
+            reloadSettings()
+        }.onAppear {
+            reloadSettings()
             NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { _ in
-                self.fixedCosts = UserDefaults.standard.integer(forKey: "fixedCostTreshold")
-                self.hourlyIncome = UserDefaults.standard.double(forKey: "hourlyIncome")
+                reloadSettings()
             }
         }
         .onDisappear {
@@ -79,8 +81,21 @@ struct AbsoluteLineChart: View {
     func nextMultipleOfFiveThousand(after value: Int) -> Int {
         return ((value / 5000) + (value % 5000 > 0 ? 1 : 0)) * 5000
     }
+}
 
+extension AbsoluteLineChart {
     
+    func reloadSettings() {
+        self.fixedCosts = UserDefaults.standard.double(forKey: "fixedCostThreshold")
+        self.hourlyIncome = UserDefaults.standard.double(forKey: "hourlyIncome")
+        
+        
+        // log values
+        #if DEBUG
+        print("fixedCosts: \(self.fixedCosts)")
+        print("hourlyIncome: \(self.hourlyIncome)")
+        #endif
+    }
 }
 
 struct AbsoluteLineChart_Preview: PreviewProvider {
@@ -93,8 +108,8 @@ struct AbsoluteLineChart_Preview: PreviewProvider {
             .padding()
             .previewLayout(.sizeThatFits)
             .onAppear() {
-                UserDefaults.standard.set(2000, forKey: "fixedCostTreshold")
-                UserDefaults.standard.set(56, forKey: "hourlyIncome")
+                UserDefaults.standard.set(0, forKey: "fixedCostThreshold")
+                UserDefaults.standard.set(0, forKey: "hourlyIncome")
             }
     }
 }
