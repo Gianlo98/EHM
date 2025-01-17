@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E91FB7162D3A9148004972C4 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9ADEBF12A34BDA100FD1BAA /* WidgetKit.framework */; };
+		E91FB7172D3A9148004972C4 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9ADEBF32A34BDA100FD1BAA /* SwiftUI.framework */; };
+		E91FB7262D3A914A004972C4 /* EHMWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E91FB7152D3A9148004972C4 /* EHMWidgetExtension.appex */; platformFilters = (ios, maccatalyst, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E936A6CD2B78242600DAEC4B /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E936A6CC2B78242600DAEC4B /* KeychainSwift */; };
 		EE1CC0E72986D44000B643D0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE1CC0E62986D44000B643D0 /* Preview Assets.xcassets */; };
 		EE1CC0F62986D44000B643D0 /* ehmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1CC0F52986D44000B643D0 /* ehmTests.swift */; };
@@ -17,6 +20,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E91FB7242D3A914A004972C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EE1CC0D42986D43F00B643D0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E91FB7142D3A9148004972C4;
+			remoteInfo = EHMWidgetExtension;
+		};
 		EE1CC0F22986D44000B643D0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EE1CC0D42986D43F00B643D0 /* Project object */;
@@ -40,6 +50,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				E91FB7262D3A914A004972C4 /* EHMWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,6 +58,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E91FB7152D3A9148004972C4 /* EHMWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EHMWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E91FB7272D3A914A004972C4 /* EHMWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EHMWidgetExtension.entitlements; sourceTree = "<group>"; };
+		E91FB72F2D3AA2CE004972C4 /* ehm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ehm.entitlements; path = ehm/ehm.entitlements; sourceTree = "<group>"; };
 		E9ADEBF12A34BDA100FD1BAA /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E9ADEBF32A34BDA100FD1BAA /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		EE1CC0DC2986D43F00B643D0 /* ehm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ehm.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,11 +74,42 @@
 		EE1CC1252986E31900B643D0 /* FakeRedmineDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeRedmineDownloader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E91FB72A2D3A914A004972C4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E91FB7142D3A9148004972C4 /* EHMWidgetExtension */;
+		};
+		E91FB72D2D3A9389004972C4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/EHMWidgetEntry.swift,
+				Model/Redmine/GroupedTimeEntry.swift,
+				Model/StorageKey.swift,
+				SharedData/SharedKeys.swift,
+				View/Components/RelativeBarChart.swift,
+			);
+			target = E91FB7142D3A9148004972C4 /* EHMWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		E94222592C9EB8F100FE2703 /* EHMApp */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = EHMApp; sourceTree = "<group>"; };
+		E91FB7182D3A9148004972C4 /* EHMWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E91FB72A2D3A914A004972C4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = EHMWidget; sourceTree = "<group>"; };
+		E94222592C9EB8F100FE2703 /* EHMApp */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E91FB72D2D3A9389004972C4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = EHMApp; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E91FB7122D3A9148004972C4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E91FB7172D3A9148004972C4 /* SwiftUI.framework in Frameworks */,
+				E91FB7162D3A9148004972C4 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE1CC0D92986D43F00B643D0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -102,10 +147,13 @@
 		EE1CC0D32986D43F00B643D0 = {
 			isa = PBXGroup;
 			children = (
+				E91FB72F2D3AA2CE004972C4 /* ehm.entitlements */,
+				E91FB7272D3A914A004972C4 /* EHMWidgetExtension.entitlements */,
 				E94222592C9EB8F100FE2703 /* EHMApp */,
 				EE1CC0E52986D44000B643D0 /* Preview Content */,
 				EE1CC0F42986D44000B643D0 /* ehmTests */,
 				EE1CC0FE2986D44000B643D0 /* ehmUITests */,
+				E91FB7182D3A9148004972C4 /* EHMWidget */,
 				E9ADEBF02A34BDA100FD1BAA /* Frameworks */,
 				EE1CC0DD2986D43F00B643D0 /* Products */,
 			);
@@ -117,6 +165,7 @@
 				EE1CC0DC2986D43F00B643D0 /* ehm.app */,
 				EE1CC0F12986D44000B643D0 /* ehmTests.xctest */,
 				EE1CC0FB2986D44000B643D0 /* ehmUITests.xctest */,
+				E91FB7152D3A9148004972C4 /* EHMWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -152,6 +201,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		E91FB7142D3A9148004972C4 /* EHMWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E91FB72B2D3A914A004972C4 /* Build configuration list for PBXNativeTarget "EHMWidgetExtension" */;
+			buildPhases = (
+				E91FB7112D3A9148004972C4 /* Sources */,
+				E91FB7122D3A9148004972C4 /* Frameworks */,
+				E91FB7132D3A9148004972C4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E91FB7182D3A9148004972C4 /* EHMWidget */,
+			);
+			name = EHMWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = EHMWidgetExtension;
+			productReference = E91FB7152D3A9148004972C4 /* EHMWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		EE1CC0DB2986D43F00B643D0 /* ehm */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EE1CC1052986D44000B643D0 /* Build configuration list for PBXNativeTarget "ehm" */;
@@ -164,6 +235,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E91FB7252D3A914A004972C4 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				E94222592C9EB8F100FE2703 /* EHMApp */,
@@ -219,9 +291,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					E91FB7142D3A9148004972C4 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					EE1CC0DB2986D43F00B643D0 = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -254,11 +329,19 @@
 				EE1CC0DB2986D43F00B643D0 /* ehm */,
 				EE1CC0F02986D44000B643D0 /* ehmTests */,
 				EE1CC0FA2986D44000B643D0 /* ehmUITests */,
+				E91FB7142D3A9148004972C4 /* EHMWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E91FB7132D3A9148004972C4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE1CC0DA2986D43F00B643D0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -284,6 +367,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E91FB7112D3A9148004972C4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE1CC0D82986D43F00B643D0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -313,6 +403,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E91FB7252D3A914A004972C4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E91FB7142D3A9148004972C4 /* EHMWidgetExtension */;
+			targetProxy = E91FB7242D3A914A004972C4 /* PBXContainerItemProxy */;
+		};
 		EE1CC0F32986D44000B643D0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EE1CC0DB2986D43F00B643D0 /* ehm */;
@@ -326,6 +421,73 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		E91FB7282D3A914A004972C4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = EHMWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JRAQWY8425;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EHMWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = EHMWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mangayo.ehm.EHMWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E91FB7292D3A914A004972C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = EHMWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JRAQWY8425;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EHMWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = EHMWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mangayo.ehm.EHMWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		EE1CC1032986D44000B643D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -450,6 +612,7 @@
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ehm/ehm.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -470,7 +633,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.occhipinti.ehm;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mangayo.ehm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = NO;
@@ -490,6 +653,7 @@
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ehm/ehm.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -510,7 +674,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.occhipinti.ehm;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mangayo.ehm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = NO;
@@ -601,6 +765,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E91FB72B2D3A914A004972C4 /* Build configuration list for PBXNativeTarget "EHMWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E91FB7282D3A914A004972C4 /* Debug */,
+				E91FB7292D3A914A004972C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EE1CC0D72986D43F00B643D0 /* Build configuration list for PBXProject "EHM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
