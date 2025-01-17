@@ -60,7 +60,7 @@ struct AbsoluteLineChart: View {
             }
         }
         .chartYScale(domain: 0...yAxisUpperBound)
-        .frame(height: 200)
+        .frame(height: UIScreen.main.bounds.height >= 812 ? 200 : 100)
         .padding()
         .refreshable {
             reloadSettings()

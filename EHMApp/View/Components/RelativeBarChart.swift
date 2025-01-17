@@ -45,7 +45,7 @@ struct RelativeBarChart: View {
                     }
                 }
             }
-            .frame(height: 200)
+            .frame(height: UIScreen.main.bounds.height >= 812 ? 200 : 100)
             .padding(.trailing, 20)
         }
     }

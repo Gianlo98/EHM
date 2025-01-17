@@ -41,10 +41,7 @@ struct ChartView: View {
                 }
             }
             .padding()
-            .frame(width: screenWidth)
-            .scaledToFit()
-            
-            Spacer()
+
             
             ZStack {
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
@@ -68,11 +65,6 @@ struct ChartView: View {
                 }
             }
             .padding()
-            .frame(width: screenWidth)
-            .scaledToFit()
-            
-            Spacer()
-            Spacer()
         }
         .task {
             await viewModel.fetchData()
