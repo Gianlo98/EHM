@@ -86,8 +86,8 @@ struct AbsoluteLineChart: View {
 extension AbsoluteLineChart {
     
     func reloadSettings() {
-        self.fixedCosts = UserDefaults.standard.double(forKey: "fixedCostThreshold")
-        self.hourlyIncome = UserDefaults.standard.double(forKey: "hourlyIncome")
+        self.fixedCosts = DataStorage.shared.loadKey(key: .fixedCostThreshold)
+        self.hourlyIncome = DataStorage.shared.loadKey(key: .hourlyIncome)
         
         
         // log values

@@ -15,7 +15,7 @@ struct MainView: View {
                     Image(systemName: "list.bullet")
                     Text("Time entries")
                 }
-            ChartView()
+            ChartView(viewModel: ChartViewModel(service: TimeEntriesService(provider: RedmineTimeEntriesProvider(client: RedmineHTTPClient()))))
                 .tabItem {
                     Image(systemName: "chart.line.uptrend.xyaxis")
                     Text("Trend")
@@ -33,9 +33,12 @@ struct MainView_Preview: PreviewProvider {
     static var previews: some View {
         let fakeDownloader = FakeRedmineDownloader()
         let client = RedmineHTTPClient(downloader: fakeDownloader)
+        let provider = RedmineTimeEntriesProvider(client: client)
+        let service = TimeEntriesService(provider: provider)
+        let chartViewModel = ChartViewModel(service: service)
         
         MainView()
-            .environmentObject(RedmineTimeEntriesProvider(client: client))
-        
+            .environmentObject(provider)
+            .environmentObject(chartViewModel)
     }
 }

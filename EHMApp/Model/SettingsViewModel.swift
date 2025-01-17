@@ -20,12 +20,15 @@ class SettingsViewModel: ObservableObject {
     @Published var userFetchMessageColor: Color = .red
 
     func loadSettings() {
-        let keychain = KeychainSwift()
-        self.redmineApiKey = keychain.get("redmineApiKey") ?? ""
-        self.redmineApiUrl = UserDefaults.standard.string(forKey: "redmineApiUrl") ?? ""
-        self.fixedCostTreshold = UserDefaults.standard.double(forKey: "fixedCostThreshold")
-        self.hourlyIncome = UserDefaults.standard.double(forKey: "hourlyIncome")
-        self.monthlyHourTreshold = UserDefaults.standard.double(forKey: "monthlyHourThreshold")
+        self.redmineApiKey = DataStorage.shared.loadKey(key: .redmineApiKey)
+        self.redmineApiUrl = DataStorage.shared.loadKey(key: .redmineApiUrl)
+        self.fixedCostTreshold = DataStorage.shared.loadKey(key: .fixedCostThreshold)
+        self.hourlyIncome = DataStorage.shared.loadKey(key: .hourlyIncome)
+        self.monthlyHourTreshold = DataStorage.shared.loadKey(key: .monthlyHourThreshold)
+    }
+    
+    func updateSettings<T>(value: T, key: StorageKey<T>) {
+        DataStorage.shared.updateKey(value: value, key: key)
     }
 
     func attemptFetchCurrentUser(timeEntriesProvider: RedmineTimeEntriesProvider) {

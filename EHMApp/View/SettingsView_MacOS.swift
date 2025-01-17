@@ -45,7 +45,7 @@ struct SettingsView_macOS: View {
                     Text("Redmine API URL:")
                     TextField("Enter URL", text: $viewModel.redmineApiUrl)
                         .onChange(of: viewModel.redmineApiUrl, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "redmineApiUrl")
+                            viewModel.updateSettings(value: newValue, key: .redmineApiUrl)
                             viewModel.attemptFetchCurrentUser(timeEntriesProvider: timeEntriesProvider)
                         }
                 }
@@ -54,8 +54,7 @@ struct SettingsView_macOS: View {
                     Text("Redmine API Key:")
                     SecureField("Enter API Key", text: $viewModel.redmineApiKey)
                         .onChange(of: viewModel.redmineApiKey, initial: false) { _, newValue in
-                            let keychain = KeychainSwift()
-                            keychain.set(newValue, forKey: "redmineApiKey")
+                            viewModel.updateSettings(value: newValue, key: .redmineApiKey)
                             viewModel.attemptFetchCurrentUser(timeEntriesProvider: timeEntriesProvider)
                         }
                 }
@@ -66,7 +65,7 @@ struct SettingsView_macOS: View {
                     Text("Fixed Cost Threshold:")
                     TextField("", value: $viewModel.fixedCostTreshold, format: .currency(code: "CHF"))
                         .onChange(of: viewModel.fixedCostTreshold, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "fixedCostThreshold")
+                            viewModel.updateSettings(value: newValue, key: .fixedCostThreshold)
                         }
                 }
                 
@@ -74,7 +73,7 @@ struct SettingsView_macOS: View {
                     Text("Hourly Income:")
                     TextField("", value: $viewModel.hourlyIncome, format: .currency(code: "CHF"))
                         .onChange(of: viewModel.hourlyIncome, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "hourlyIncome")
+                            viewModel.updateSettings(value: newValue, key: .hourlyIncome)
                         }
                 }
                 
@@ -82,7 +81,7 @@ struct SettingsView_macOS: View {
                     Text("Monthly Hours Threshold:")
                     TextField("", value: $viewModel.monthlyHourTreshold, format: .number)
                         .onChange(of: viewModel.monthlyHourTreshold, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "monthlyHourThreshold")
+                            viewModel.updateSettings(value: newValue, key: .monthlyHourThreshold)
                         }
                 }
             }

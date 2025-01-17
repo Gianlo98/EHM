@@ -31,14 +31,13 @@ struct SettingsView_iOS: View {
 #endif
                         .disableAutocorrection(true)
                         .onChange(of: viewModel.redmineApiUrl, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "redmineApiUrl")
+                            viewModel.updateSettings(value: newValue, key: .redmineApiUrl)
                             viewModel.attemptFetchCurrentUser(timeEntriesProvider: timeEntriesProvider)
                         }
                     
                     SecureField("Redmine API Key", text: $viewModel.redmineApiKey)
                         .onChange(of: viewModel.redmineApiKey, initial: false) { _, newValue in
-                            let keychain = KeychainSwift()
-                            keychain.set(newValue, forKey: "redmineApiKey")
+                            viewModel.updateSettings(value: newValue, key: .redmineApiKey)
                             viewModel.attemptFetchCurrentUser(timeEntriesProvider: timeEntriesProvider)
                         }
                 }
@@ -46,21 +45,21 @@ struct SettingsView_iOS: View {
                 Section("Fixed Cost Threshold") {
                     DecimalTextField(value: $viewModel.fixedCostTreshold, placeholder: "Fixed Cost Threshold")
                         .onChange(of: viewModel.fixedCostTreshold, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "fixedCostThreshold")
+                            viewModel.updateSettings(value: newValue, key: .fixedCostThreshold)
                         }
                 }
                 
                 Section("Hourly Income") {
                     DecimalTextField(value: $viewModel.hourlyIncome, placeholder: "Hourly Income")
                         .onChange(of: viewModel.hourlyIncome, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "hourlyIncome")
+                            viewModel.updateSettings(value: newValue, key: .hourlyIncome)
                         }
                 }
                 
                 Section("Monthly Hours Threshold") {
                     DecimalTextField(value: $viewModel.monthlyHourTreshold, placeholder: "Monthly Hours Threshold")
                         .onChange(of: viewModel.monthlyHourTreshold, initial: false) { _, newValue in
-                            UserDefaults.standard.set(newValue, forKey: "monthlyHourThreshold")
+                            viewModel.updateSettings(value: newValue, key: .monthlyHourThreshold)
                         }
                 }
             }

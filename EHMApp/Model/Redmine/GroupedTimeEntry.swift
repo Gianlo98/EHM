@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct GroupedTimeEntry {
+struct GroupedTimeEntry: Codable {
     var date: Date
     var value: Double
 }

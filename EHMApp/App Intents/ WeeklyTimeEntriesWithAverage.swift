@@ -30,7 +30,7 @@ struct  WeeklyTimeEntriesWithAverage: AppIntent {
         }
         
         // Fetch the monthly threshold from UserDefaults (default to 160 hours if not set)
-        let monthlyThreshold: Double = UserDefaults.standard.double(forKey: "monthlyHourThreshold")
+        let monthlyThreshold: Double = DataStorage.shared.loadKey(key: .monthlyHourThreshold)
         
         // Calculate the total hours worked for the month so far
         let workedMonthHours = timeEntriesProvider.summedTimeEntries.last?.value ?? 0.0

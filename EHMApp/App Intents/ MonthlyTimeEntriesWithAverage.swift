@@ -31,7 +31,7 @@ struct MonthlyTimeEntriesWithAverage: AppIntent {
         }
 
         // Fetch the monthly threshold from UserDefaults (default to 160 hours if not set)
-        let monthlyThreshold: Double = UserDefaults.standard.double(forKey: "monthlyHourThreshold")
+        let monthlyThreshold: Double = DataStorage.shared.loadKey(key: .monthlyHourThreshold)
         
         // Calculate the average hours per day needed to meet the monthly threshold
         let (_, avgHoursPerDay) = TimeEntryUtils.getAverageHoursPerDayToReachMonthlyThreshold(monthlyThreshold: monthlyThreshold, monthHours: totalHoursThisMonth)

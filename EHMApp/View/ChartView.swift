@@ -8,17 +8,9 @@
 import SwiftUI
 import Charts
 
-
 struct ChartView: View {
     
-    @EnvironmentObject var timeEntriesProvider: RedmineTimeEntriesProvider
-    
-    @State var isLoading: Bool = false
-    
-    @State var hourlyWage: Double = 0
-    @State var todayHours: Double = 0
-    @State var monthHours: Double = 0
-    @State var monhtlyThreshold: Double = 0
+    @StateObject var viewModel: ChartViewModel
     
 #if os(iOS)
     let backgroundColor = Color(UIColor.secondarySystemBackground)
@@ -28,13 +20,7 @@ struct ChartView: View {
     let backgroundColor = Color(NSColor.white)
 #endif
     
-    
     var body: some View {
-        let (workingDaysLeft, averageHoursPerDay) = TimeEntryUtils.getAverageHoursPerDayToReachMonthlyThreshold(
-            monthlyThreshold: monhtlyThreshold,
-            monthHours: monthHours
-        )
-        
         VStack {
             ZStack {
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
@@ -46,16 +32,17 @@ struct ChartView: View {
                             .font(.largeTitle.bold())
                             .padding(.leading, 20)
                         Spacer()
-                        Text("Period: \(monthHours * hourlyWage, specifier: "%.0f .-")")
+                        Text("Period: \(viewModel.monthHours * viewModel.hourlyWage, specifier: "%.0f .-")")
                             .font(.largeTitle.bold())
                             .padding()
                     }
                     
-                    AbsoluteLineChart(chartData: $timeEntriesProvider.summedTimeEntries)
+                    AbsoluteLineChart(chartData: $viewModel.summedTimeEntries)
                 }
-            }.padding()
-                .frame(width: screenWidth)
-                .scaledToFit()
+            }
+            .padding()
+            .frame(width: screenWidth)
+            .scaledToFit()
             
             Spacer()
             
@@ -70,92 +57,38 @@ struct ChartView: View {
                             .padding(.leading, 20)
                         Spacer()
                         VStack(alignment: .trailing) {
-                            Text("Hours booked: \(monthHours, specifier: "%.2f")")
+                            Text("Hours Booked: \(viewModel.monthHours, specifier: "%.2f")")
                                 .font(.title.bold())
-                            Text("Days left: \(workingDaysLeft), Avg. Hours/Day: \(averageHoursPerDay, specifier: "%.2f")")
+                            Text("Days left: \(viewModel.workingDaysLeft), Avg. Hours/Day: \(viewModel.averageHoursPerDay, specifier: "%.2f")")
                                 .font(.footnote.bold())
                         }.padding()
                     }
                     
-                    RelativeBarChart(chartData:  $timeEntriesProvider.groupedTimeEntries)
+                    RelativeBarChart(chartData: $viewModel.groupedTimeEntries)
                 }
-            }.padding()
-                .frame(width: screenWidth)
-                .scaledToFit()
+            }
+            .padding()
+            .frame(width: screenWidth)
+            .scaledToFit()
             
             Spacer()
             Spacer()
-        }.refreshable {
-            reloadSettings()
-            await fetchTimeEntries()
         }
         .task {
-            reloadSettings()
-            await fetchTimeEntries()
-        }.onAppear {
-            reloadSettings()
-            NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { _ in
-                reloadSettings()
-            }
+            await viewModel.fetchData()
         }
-        .onDisappear {
-            NotificationCenter.default.removeObserver(self, name: UserDefaults.didChangeNotification, object: nil)
-        }
-    }
-    
-}
-
-
-
-
-extension ChartView {
-    func getCurrentMonth() -> String {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.dateFormat = "MMMM"
-        return formatter.string(from: Date.now)
-    }
-    
-    func fetchTimeEntries() async {
-        isLoading = true
-        do {
-            try await timeEntriesProvider.fetchTimeEntries()
-            
-            self.todayHours = self.timeEntriesProvider.groupedTimeEntries.last?.value ?? 0.0
-            self.monthHours = self.timeEntriesProvider.summedTimeEntries.last?.value ?? 0.0
-            
-            #if DEBUG
-            print("todayHours: \(self.todayHours)")
-            print("monthHours: \(self.monthHours)")
-            #endif
-            
-        } catch {
-            //            self.hasError = true
-        }
-        isLoading = false
-    }
-    
-    func reloadSettings() {
-        self.monhtlyThreshold = UserDefaults.standard.double(forKey: "monthlyHourThreshold")
-        self.hourlyWage = UserDefaults.standard.double(forKey: "hourlyIncome")
-        
-        
-        // log values
-        #if DEBUG
-        print("monthlyThreshold: \(self.monhtlyThreshold)")
-        print("hourlyWage: \(self.hourlyWage)")
-        #endif
     }
 }
-
-
-
 
 struct ChartView_Preview: PreviewProvider {
     static var previews: some View {
         let fakeDownloader = FakeRedmineDownloader(feature: testFeature_te04)
         let client = RedmineHTTPClient(downloader: fakeDownloader)
+        let provider = RedmineTimeEntriesProvider(client: client)
+        let timeEntriesService = TimeEntriesService(provider: provider)
+        let viewModel = ChartViewModel(service: timeEntriesService)
         
-        ChartView()
-            .environmentObject(RedmineTimeEntriesProvider(client: client))
+        ChartView(viewModel: viewModel)
+            .environmentObject(provider)
     }
 }

@@ -13,7 +13,7 @@ class RedmineHTTPClient {
     private let dateFrom: Date
     private let dateTo: Date
     private var redmineUrl: String {
-        return UserDefaults.standard.string(forKey: "redmineApiUrl") ?? ""
+        return DataStorage.shared.loadKey(key: .redmineApiUrl)
     }
     
     private lazy var decoder: JSONDecoder = {
