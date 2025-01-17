@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import KeychainSwift
 
-
+@MainActor
 class SettingsViewModel: ObservableObject {
     @Published var redmineApiUrl: String = ""
     @Published var redmineApiKey: String = ""
