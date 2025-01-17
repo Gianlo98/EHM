@@ -25,7 +25,7 @@ struct ChartView: View {
     let screenWidth = UIScreen.main.bounds.size.width
 #elseif os(macOS)
     let screenWidth = NSApplication.shared.windows.first?.frame.size.width ?? 0
-    let backgroundColor = Color(NSColor.windowBackgroundColor)
+    let backgroundColor = Color(NSColor.white)
 #endif
     
     
