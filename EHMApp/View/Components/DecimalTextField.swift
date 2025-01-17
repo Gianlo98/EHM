@@ -1,28 +1,24 @@
-//
-//  DecimalTextField.swift
-//  EHM
-//
-//  Created by Gianlo Personal on 01.10.2024.
-//
 import SwiftUI
 
-struct DecimalTextField: View {
-    @Binding var value: Double
-    var placeholder: String
-
-    #if os(iOS)
-    var body: some View {
-        DecimalTextFieldUIKit(value: $value, placeholder: placeholder)
-    }
-    #else
-    var body: some View {
-        DecimalTextFieldAppKit(value: $value, placeholder: placeholder)
-    }
-    #endif
-}
 
 #if os(iOS)
 import UIKit
+extension UITextField {
+    func addDoneButtonOnKeyboard() {
+        let toolbar: UIToolbar = UIToolbar()
+        toolbar.sizeToFit()
+
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
+
+        toolbar.setItems([flexSpace, doneButton], animated: false)
+        self.inputAccessoryView = toolbar
+    }
+
+    @objc func doneButtonAction() {
+        self.resignFirstResponder() // Dismiss the keyboard
+    }
+}
 
 struct DecimalTextFieldUIKit: UIViewRepresentable {
     @Binding var value: Double
@@ -38,7 +34,10 @@ struct DecimalTextFieldUIKit: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UITextField, context: Context) {
-        uiView.text = String(format: "%.2f", value)
+        let formattedValue = String(format: "%.2f", value)
+        if uiView.text != formattedValue {
+            uiView.text = formattedValue
+        }
     }
 
     func makeCoordinator() -> Coordinator {
@@ -53,25 +52,16 @@ struct DecimalTextFieldUIKit: UIViewRepresentable {
         }
 
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            // Allow numbers, one decimal separator, and locale-aware formatting
             let formatter = NumberFormatter()
-            formatter.locale = Locale.current
             let decimalSeparator = formatter.decimalSeparator ?? "."
             let allowedCharacters = CharacterSet(charactersIn: "0123456789\(decimalSeparator)")
-            let characterSet = CharacterSet(charactersIn: string)
-            return allowedCharacters.isSuperset(of: characterSet)
+            return allowedCharacters.isSuperset(of: CharacterSet(charactersIn: string))
         }
 
         func textFieldDidEndEditing(_ textField: UITextField) {
-            if let text = textField.text,
-               let number = NumberFormatter().number(from: text)?.doubleValue {
+            if let text = textField.text, let number = Double(text) {
                 value = number
             }
-        }
-
-        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder()
-            return true
         }
     }
 }
@@ -88,13 +78,14 @@ struct DecimalTextFieldAppKit: NSViewRepresentable {
         let textField = NSTextField()
         textField.placeholderString = placeholder
         textField.delegate = context.coordinator
-        textField.isBezeled = true
-        textField.bezelStyle = .roundedBezel
         return textField
     }
 
     func updateNSView(_ nsView: NSTextField, context: Context) {
-        nsView.stringValue = String(format: "%.2f", value)
+        let formattedValue = String(format: "%.2f", value)
+        if nsView.stringValue != formattedValue {
+            nsView.stringValue = formattedValue
+        }
     }
 
     func makeCoordinator() -> Coordinator {
@@ -108,12 +99,24 @@ struct DecimalTextFieldAppKit: NSViewRepresentable {
             _value = value
         }
 
-        func controlTextDidEndEditing(_ obj: Notification) {
-            if let textField = obj.object as? NSTextField,
-               let number = NumberFormatter().number(from: textField.stringValue)?.doubleValue {
+        func controlTextDidChange(_ notification: Notification) {
+            if let textField = notification.object as? NSTextField, let number = Double(textField.stringValue) {
                 value = number
             }
         }
     }
 }
 #endif
+
+struct DecimalTextField: View {
+    @Binding var value: Double
+    var placeholder: String
+
+    var body: some View {
+        #if os(iOS)
+        DecimalTextFieldUIKit(value: $value, placeholder: placeholder)
+        #else
+        DecimalTextFieldAppKit(value: $value, placeholder: placeholder)
+        #endif
+    }
+}
