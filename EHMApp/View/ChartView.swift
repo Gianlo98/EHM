@@ -9,7 +9,6 @@ import SwiftUI
 import Charts
 
 struct ChartView: View {
-    
     @StateObject var viewModel: ChartViewModel
     
 #if os(iOS)
@@ -41,7 +40,7 @@ struct ChartView: View {
                 }
             }
             .padding()
-
+            
             
             ZStack {
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
@@ -66,6 +65,7 @@ struct ChartView: View {
             }
             .padding()
         }
+        .navigationTitle("Settings")
         .task {
             await viewModel.fetchData()
         }

@@ -8,23 +8,29 @@
 import SwiftUI
 
 struct MainView: View {
+    @AppStorage("isConfigured") private var isConfigured: Bool = false
+    
     var body: some View {
-        TabView {
-            TimeEntriesView()
-                .tabItem {
-                    Image(systemName: "list.bullet")
-                    Text("Time entries")
-                }
-            ChartView(viewModel: ChartViewModel(service: TimeEntriesService(provider: RedmineTimeEntriesProvider(client: RedmineHTTPClient()))))
-                .tabItem {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                    Text("Trend")
-                }
+        if isConfigured {
+            TabView {
+                TimeEntriesView()
+                    .tabItem {
+                        Image(systemName: "list.bullet")
+                        Text("Time entries")
+                    }
+                ChartView(viewModel: ChartViewModel(service: TimeEntriesService(provider: RedmineTimeEntriesProvider(client: RedmineHTTPClient()))))
+                    .tabItem {
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                        Text("Trend")
+                    }
+                SettingsView()
+                    .tabItem {
+                        Image(systemName: "gearshape")
+                        Text("Settings")
+                    }
+            }
+        } else {
             SettingsView()
-                .tabItem {
-                    Image(systemName: "gearshape")
-                    Text("Settings")
-                }
         }
     }
 }
