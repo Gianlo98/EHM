@@ -11,13 +11,8 @@ import Charts
 struct ChartView: View {
     @StateObject var viewModel: ChartViewModel
     
-#if os(iOS)
     let backgroundColor = Color(UIColor.secondarySystemBackground)
     let screenWidth = UIScreen.main.bounds.size.width
-#elseif os(macOS)
-    let screenWidth = NSApplication.shared.windows.first?.frame.size.width ?? 0
-    let backgroundColor = Color(NSColor.white)
-#endif
     
     var body: some View {
         VStack {
@@ -81,6 +76,5 @@ struct ChartView_Preview: PreviewProvider {
         let viewModel = ChartViewModel(service: timeEntriesService)
         
         ChartView(viewModel: viewModel)
-            .environmentObject(provider)
     }
 }

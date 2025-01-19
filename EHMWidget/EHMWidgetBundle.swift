@@ -11,7 +11,7 @@ import SwiftUI
 @main
 struct EHMWidgetBundle: WidgetBundle {
     var body: some Widget {
-        EHMWidget()
-        EHMWidgetControl()
+        EHMMonthlyChartWidget()
+        EHMDailyHoursWidget()
     }
 }

@@ -40,6 +40,7 @@ class ChartViewModel: ObservableObject {
                 workingDaysLeft: self.workingDaysLeft,
                 monthHours: self.monthHours
             ))
+            
         } catch {
             print("Error fetching data: \(error)")
         }

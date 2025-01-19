@@ -12,7 +12,7 @@ struct GroupedTimeEntry: Codable {
 }
 
 extension GroupedTimeEntry {
-    static func fakeGroupedData() -> [GroupedTimeEntry] {
+    static func fakeGroupedData(totalHours: Double = 8.2) -> [GroupedTimeEntry] {
         var fakeData: [GroupedTimeEntry] = []
         
         for i in 1...30 {
@@ -20,6 +20,8 @@ extension GroupedTimeEntry {
             let value = date!.dayNumberOfWeek()! <= 5 ? Double.random(in: 2.0 ..< 12.0) : 0
             fakeData.append(GroupedTimeEntry(date: date!, value: value))
         }
+        
+        fakeData.append(GroupedTimeEntry(date: Date(), value: totalHours))
         
         return fakeData
     }
