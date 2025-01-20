@@ -32,8 +32,13 @@ class RedmineTimeEntriesProvider: ObservableObject {
         return try await client.currentUser
     }
     
-    convenience init(client: RedmineHTTPClient = RedmineHTTPClient()) {
-        self.init(dateFrom: Date.now.startOfMonth(), dateTo:  Date.now.endOfMonth(), client: RedmineHTTPClient(dateFrom: Date.now.startOfMonth(), dateTo: Date.now.endOfMonth()))
+    convenience init(client: RedmineHTTPClient? = nil) {
+        if let passedClient = client {
+            self.init(dateFrom: Date.now.startOfMonth(), dateTo: Date.now.endOfMonth(), client: passedClient)
+        } else {
+            let resolvedClient = RedmineHTTPClient(dateFrom: Date.now.startOfMonth(), dateTo: Date.now.endOfMonth())
+            self.init(dateFrom: Date.now.startOfMonth(), dateTo: Date.now.endOfMonth(), client: resolvedClient)
+        }
     }
     
     init(dateFrom: Date, dateTo: Date, client: RedmineHTTPClient) {
@@ -70,13 +75,13 @@ class RedmineTimeEntriesProvider: ObservableObject {
     
     func setDateFrom(date: Date) async throws {
         self.dateFrom = date
-        self.client = RedmineHTTPClient(dateFrom: self.dateFrom, dateTo: self.dateTo)
-        try await fetchTimeEntries()
+//        self.client = RedmineHTTPClient(dateFrom: self.dateFrom, dateTo: self.dateTo)
+//        try await fetchTimeEntries()
     }
     
     func setDateTo(date: Date) async throws {
         self.dateTo = date
-        self.client = RedmineHTTPClient(dateFrom: self.dateFrom, dateTo: self.dateTo)
-        try await fetchTimeEntries()
+//        self.client = RedmineHTTPClient(dateFrom: self.dateFrom, dateTo: self.dateTo)
+//        try await fetchTimeEntries()
     }
 }

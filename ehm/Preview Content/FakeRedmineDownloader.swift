@@ -12,6 +12,12 @@ class FakeRedmineDownloader: RedmineDownloader {
     
     func fetch(from: URL) async throws -> Data {
         try await Task.sleep(nanoseconds: UInt64.random(in: 100_000_000...500_000_000))
+        
+        if from.absoluteString.contains("current.json") {
+            return testUser
+        }
+        
+        
         return feature
     }
     

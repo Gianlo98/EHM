@@ -34,7 +34,7 @@ extension RedmineTimeEntry: Decodable {
         let rawProject = try? values.decode(RedmineProject.self, forKey: .project)
         let rawActivity = try? values.decode(RedmineActivity.self, forKey: .activity)
         let rawDate = try? values.decode(String.self, forKey: .date)
-        
+
         var rawHours: Double?
         if let rawHoursStr = try? values.decode(String.self, forKey: .hours) {
             rawHours = Double(rawHoursStr)
@@ -61,6 +61,8 @@ extension RedmineTimeEntry: Decodable {
         self.activity = activity
         self.hours = hours
         self.date = date
+        
+
     }
 }
 

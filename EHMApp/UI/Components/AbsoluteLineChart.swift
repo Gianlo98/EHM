@@ -88,13 +88,6 @@ extension AbsoluteLineChart {
     func reloadSettings() {
         self.fixedCosts = DataStorage.shared.loadKey(key: .fixedCostThreshold)
         self.hourlyIncome = DataStorage.shared.loadKey(key: .hourlyIncome)
-        
-        
-        // log values
-        #if DEBUG
-        print("fixedCosts: \(self.fixedCosts)")
-        print("hourlyIncome: \(self.hourlyIncome)")
-        #endif
     }
 }
 

@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 struct ChartView: View {
-    @StateObject var viewModel: ChartViewModel
+    @StateObject var viewModel: ChartViewModel = ChartViewModel()
     
     let backgroundColor = Color(UIColor.secondarySystemBackground)
     let screenWidth = UIScreen.main.bounds.size.width
@@ -70,11 +70,10 @@ struct ChartView: View {
 struct ChartView_Preview: PreviewProvider {
     static var previews: some View {
         let fakeDownloader = FakeRedmineDownloader(feature: testFeature_te04)
-        let client = RedmineHTTPClient(downloader: fakeDownloader)
-        let provider = RedmineTimeEntriesProvider(client: client)
-        let timeEntriesService = TimeEntriesService(provider: provider)
-        let viewModel = ChartViewModel(service: timeEntriesService)
-        
-        ChartView(viewModel: viewModel)
+        let fakeClient = RedmineHTTPClient(downloader: fakeDownloader)
+        let fakeProvider = RedmineTimeEntriesProvider(client: fakeClient)
+        let _ = DataManager.initialize(provider: fakeProvider)
+
+        ChartView()
     }
 }

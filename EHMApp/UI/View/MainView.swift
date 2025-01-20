@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainView: View {
-    @AppStorage("isConfigured") private var isConfigured: Bool = false
+    @AppStorage(StorageKey<Bool>.isConfigured.name) private var isConfigured: Bool = false
     
     var body: some View {
         if isConfigured {
@@ -18,7 +18,7 @@ struct MainView: View {
                         Image(systemName: "list.bullet")
                         Text("Time entries")
                     }
-                ChartView(viewModel: ChartViewModel(service: TimeEntriesService(provider: RedmineTimeEntriesProvider(client: RedmineHTTPClient()))))
+                ChartView()
                     .tabItem {
                         Image(systemName: "chart.line.uptrend.xyaxis")
                         Text("Trend")
@@ -37,14 +37,24 @@ struct MainView: View {
 
 struct MainView_Preview: PreviewProvider {
     static var previews: some View {
-        let fakeDownloader = FakeRedmineDownloader()
-        let client = RedmineHTTPClient(downloader: fakeDownloader)
-        let provider = RedmineTimeEntriesProvider(client: client)
-        let service = TimeEntriesService(provider: provider)
-        let chartViewModel = ChartViewModel(service: service)
+        let fakeDownloader = FakeRedmineDownloader(feature: testFeature_te04)
+        let fakeClient = RedmineHTTPClient(downloader: fakeDownloader)
+        let fakeProvider = RedmineTimeEntriesProvider(client: fakeClient)
+        let _ = DataManager.initialize(provider: fakeProvider)
         
-        MainView()
-            .environmentObject(provider)
-            .environmentObject(chartViewModel)
+        let previewUserDefaults: UserDefaults = {
+            let d = UserDefaults(suiteName: "preview_user_defaults")!
+            d.set(false, forKey: StorageKey<Bool>.isConfigured.name)
+            return d
+        }()
+        
+        Group {
+            MainView()
+                .previewDisplayName("Configured")
+            
+            MainView()
+                .previewDisplayName("Not Configured")
+                .defaultAppStorage(previewUserDefaults)
+        }
     }
 }

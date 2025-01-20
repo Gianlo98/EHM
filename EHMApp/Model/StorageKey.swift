@@ -24,4 +24,5 @@ struct StorageKey<T>: Equatable {
     static var fixedCostThreshold: StorageKey<Double> { StorageKey<Double>("fixedCostThreshold", 2000) }
     static var hourlyIncome: StorageKey<Double> { StorageKey<Double>("hourlyIncome", 35) }
     static var monthlyHourThreshold: StorageKey<Double> { StorageKey<Double>("monthlyHourThreshold", 165) }
+    static var isConfigured: StorageKey<Bool> { StorageKey<Bool>("isConfigured", false) }
 }

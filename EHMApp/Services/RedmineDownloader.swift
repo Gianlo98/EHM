@@ -22,23 +22,27 @@ protocol RedmineDownloader {
 
 extension URLSession: RedmineDownloader {
     func fetch(from url: URL) async throws -> Data {
-        
         let keychain = KeychainSwift()
         guard let apiKey = keychain.get("redmineApiKey") else {
             throw RedmineError.missingCredentials
         }
         
-        var request = URLRequest(url: url ,timeoutInterval: Double.infinity)
+        Logger.providerLogger.debug("[RedmineDownloader] Querying \(url)")
+        
+        // Customize timeout for the URLRequest
+        var request = URLRequest(url: url, timeoutInterval: 120) // Set timeout to 120 seconds
         request.addValue(apiKey, forHTTPHeaderField: "X-Redmine-API-Key")
-
         request.httpMethod = "GET"
-        guard let (data, response) = try await self.data(for: request, delegate: nil) as? (Data, HTTPURLResponse),
-              validStatus.contains(response.statusCode) else {
-            throw RedmineError.networkError(comment: "Request to \(url) went wrong")
+        
+        // Perform the request
+        let (data, response) = try await self.data(for: request, delegate: nil)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              validStatus.contains(httpResponse.statusCode) else {
+            throw RedmineError.networkError(comment: "Request to \(url) failed with response: \(response)")
         }
         
-        Logger.providerLogger.debug("Request to \(url) returned with status code \(response.statusCode)")
-        
+        Logger.providerLogger.debug("Request to \(url) succeeded with status code \(httpResponse.statusCode)")
         return data
     }
 }

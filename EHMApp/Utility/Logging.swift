@@ -11,7 +11,4 @@ import OSLog
 extension Logger {
     static let intentLogging = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "App Intent")
     static let providerLogger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Provider")
-
-//    static let entityQueryLogging = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Entity Query")
-//    static let activityTracking = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Activity Tracking")
 }

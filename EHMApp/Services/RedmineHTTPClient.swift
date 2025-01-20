@@ -22,6 +22,17 @@ class RedmineHTTPClient {
         return aDecoder
     }()
     
+    convenience init (downloader: any RedmineDownloader = URLSession.shared) {
+        self.init(downloader: downloader, dateFrom: Date.now.startOfMonth(), dateTo: Date.now.endOfMonth())
+    }
+    
+    init(downloader: any RedmineDownloader = URLSession.shared as any RedmineDownloader, dateFrom: Date, dateTo: Date) {
+        self.downloader = downloader
+        self.dateFrom = dateFrom
+        self.dateTo = dateTo
+    }
+    
+    
     var timeEntries: [RedmineTimeEntry] {
         get async throws {
             guard redmineUrl != "" else {
@@ -39,6 +50,7 @@ class RedmineHTTPClient {
             var fetchedEntries = 0
             var currentOffset = 0
             let limit = 100
+            
             let userId = try await self.currentUser.id
             
             var timeEntryResult = RedmineTimeEntriesResult.EMPTY
@@ -68,7 +80,7 @@ class RedmineHTTPClient {
                 throw RedmineError.missingCredentials
             }
             
-            Logger.providerLogger.debug("Fetching current user from \(self.redmineUrl)")
+            Logger.providerLogger.debug("[RedmineHTTPClient] Fetching current user from \(self.redmineUrl)")
             // Safely unwrap the URL
             guard let url = URL(string: "\(redmineUrl)/users/current.json") else {
                 throw RedmineError.invalidUrl
@@ -82,16 +94,6 @@ class RedmineHTTPClient {
             
             return currentUserResult
         }
-    }
-    
-    convenience init (downloader: any RedmineDownloader = URLSession.shared) {
-        self.init(downloader: downloader, dateFrom: Date.now.startOfMonth(), dateTo: Date.now.endOfMonth())
-    }
-    
-    init(downloader: any RedmineDownloader = URLSession.shared, dateFrom: Date, dateTo: Date) {
-        self.downloader = downloader
-        self.dateFrom = dateFrom
-        self.dateTo = dateTo
     }
 }
 

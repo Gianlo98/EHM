@@ -61,6 +61,7 @@
 		E91FB7152D3A9148004972C4 /* EHMWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EHMWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E91FB7272D3A914A004972C4 /* EHMWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EHMWidgetExtension.entitlements; sourceTree = "<group>"; };
 		E91FB72F2D3AA2CE004972C4 /* ehm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ehm.entitlements; path = ehm/ehm.entitlements; sourceTree = "<group>"; };
+		E96B11B42D3E93C700ABE714 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = ehm/Info.plist; sourceTree = "<group>"; };
 		E9ADEBF12A34BDA100FD1BAA /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E9ADEBF32A34BDA100FD1BAA /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		EE1CC0DC2986D43F00B643D0 /* ehm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ehm.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,7 +90,7 @@
 				Model/Redmine/GroupedTimeEntry.swift,
 				Model/StorageKey.swift,
 				SharedData/SharedKeys.swift,
-				View/Components/RelativeBarChart.swift,
+				UI/Components/RelativeBarChart.swift,
 			);
 			target = E91FB7142D3A9148004972C4 /* EHMWidgetExtension */;
 		};
@@ -147,6 +148,7 @@
 		EE1CC0D32986D43F00B643D0 = {
 			isa = PBXGroup;
 			children = (
+				E96B11B42D3E93C700ABE714 /* Info.plist */,
 				E91FB72F2D3AA2CE004972C4 /* ehm.entitlements */,
 				E91FB7272D3A914A004972C4 /* EHMWidgetExtension.entitlements */,
 				E94222592C9EB8F100FE2703 /* EHMApp */,
@@ -621,6 +623,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ehm/Preview Content\"";
 				DEVELOPMENT_TEAM = JRAQWY8425;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ehm/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = EHM;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -663,6 +666,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ehm/Preview Content\"";
 				DEVELOPMENT_TEAM = JRAQWY8425;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ehm/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = EHM;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

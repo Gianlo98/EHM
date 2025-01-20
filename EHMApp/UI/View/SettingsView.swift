@@ -2,27 +2,23 @@ import SwiftUI
 
 struct SettingsView: View {
 
-    @EnvironmentObject var timeEntriesProvider: RedmineTimeEntriesProvider
     @StateObject private var viewModel = SettingsViewModel()
-    @AppStorage("isConfigured") private var isConfigured: Bool = false // AppStorage to track app configuration state
+    @AppStorage(StorageKey<Bool>.isConfigured.name) private var isConfigured: Bool = false
+
     
     var body: some View {
         NavigationView {
             VStack {
                 Form {
                     Section("Date Range") {
-                        DatePicker("Date From", selection: $timeEntriesProvider.dateFrom, in: ...Date.now, displayedComponents: .date)
-                            .onChange(of: timeEntriesProvider.dateFrom, initial: false) { _, newValue in
-                                Task {
-                                    try await timeEntriesProvider.setDateFrom(date: newValue)
-                                }
+                        DatePicker("Date From", selection: $viewModel.dateFrom, in: ...Date.now, displayedComponents: .date)
+                            .onChange(of: viewModel.dateFrom, initial: false) { _, newValue in
+                                viewModel.setDateFrom(date: newValue)
                             }
                         
-                        DatePicker("Date To", selection: $timeEntriesProvider.dateTo, in: ...Date.now.endOfMonth(), displayedComponents: .date)
-                            .onChange(of: timeEntriesProvider.dateTo, initial: false) { _, newValue in
-                                Task {
-                                    try await timeEntriesProvider.setDateTo(date: newValue)
-                                }
+                        DatePicker("Date To", selection: $viewModel.dateTo, in: ...Date.now.endOfMonth(), displayedComponents: .date)
+                            .onChange(of: viewModel.dateTo, initial: false) { _, newValue in
+                                viewModel.setDateTo(date: newValue)
                             }
                     }
                     
@@ -34,10 +30,12 @@ struct SettingsView: View {
                                 viewModel.updateSettings(value: newValue, key: .redmineApiUrl)
                             }
                         
-                        SecureField("Redmine API Key", text: $viewModel.redmineApiKey)
-                            .onChange(of: viewModel.redmineApiKey, initial: false) { _, newValue in
-                                viewModel.updateSettings(value: newValue, key: .redmineApiKey)
-                            }
+
+                            SecureField("Redmine API Key", text: $viewModel.redmineApiKey)
+                                .onChange(of: viewModel.redmineApiKey, initial: false) { _, newValue in
+                                    viewModel.updateSettings(value: newValue, key: .redmineApiKey)
+                                }
+                        
                         
                         if let message = viewModel.userFetchMessage {
                             Text(message)
@@ -71,7 +69,7 @@ struct SettingsView: View {
                 if !isConfigured {
                     VStack {
                         Button(action: {
-                            viewModel.attemptFetchCurrentUser(timeEntriesProvider: timeEntriesProvider) { success in
+                            viewModel.attemptFetchCurrentUser() { success in
                                 if success {
                                     isConfigured = true
                                 }
@@ -100,19 +98,25 @@ struct SettingsView: View {
 struct SettingsView_Preview: PreviewProvider {
     static var previews: some View {
         // Mock Data for Preview
-        let mockProvider = RedmineTimeEntriesProvider()
-        mockProvider.dateFrom = Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? Date()
-        mockProvider.dateTo = Date()
+        let fakeDownloader = FakeRedmineDownloader(feature: testFeature_te04)
+        let fakeClient = RedmineHTTPClient(downloader: fakeDownloader)
+        let mockProvider = RedmineTimeEntriesProvider(client: fakeClient)
+        let _ = DataManager.initialize(provider: mockProvider)
         
-        let mockViewModel = SettingsViewModel()
-        mockViewModel.redmineApiUrl = "https://redmine.example.com"
-        mockViewModel.redmineApiKey = "sample_api_key"
-        mockViewModel.fixedCostTreshold = 2000.0
-        mockViewModel.hourlyIncome = 35.0
-        mockViewModel.monthlyHourTreshold = 165.0
+        let previewUserDefaults: UserDefaults = {
+            let d = UserDefaults(suiteName: "preview_user_defaults")!
+            d.set(false, forKey: StorageKey<Bool>.isConfigured.name)
+            return d
+        }()
         
-        return SettingsView()
-            .environmentObject(mockProvider)
-            .previewDisplayName("Settings View Preview")
+        Group {
+            SettingsView()
+                .previewDisplayName("Configured")
+            
+            SettingsView()
+                .previewDisplayName("Not Configured")
+                .defaultAppStorage(previewUserDefaults)
+        }
+        
     }
 }
