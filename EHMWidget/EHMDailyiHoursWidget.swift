@@ -191,7 +191,7 @@ struct EHMDailyHoursWidget_Previews: PreviewProvider {
             )
             .previewDisplayName("No Hours Logged")
             .previewContext(WidgetPreviewContext(family: .systemSmall))
-
+            
             EHMDailyHoursWidgetView(
                 entry: EHMWidgetEntry(
                     date: Date(),
@@ -202,7 +202,7 @@ struct EHMDailyHoursWidget_Previews: PreviewProvider {
                 )
             )
             .previewDisplayName("Half Daily Goal")
-            .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
 
             EHMDailyHoursWidgetView(
                 entry: EHMWidgetEntry(
@@ -214,7 +214,7 @@ struct EHMDailyHoursWidget_Previews: PreviewProvider {
                 )
             )
             .previewDisplayName("Goal Reached")
-            .previewContext(WidgetPreviewContext(family: .accessoryCircular))
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
 
             EHMDailyHoursWidgetView(
                 entry: EHMWidgetEntry(
@@ -226,6 +226,42 @@ struct EHMDailyHoursWidget_Previews: PreviewProvider {
                 )
             )
             .previewDisplayName("Exceeding Daily Goal")
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
+
+            EHMDailyHoursWidgetView(
+                entry: EHMWidgetEntry(
+                    date: Date(),
+                    groupedTimeEntries: GroupedTimeEntry.fakeGroupedData(totalHours: 4),
+                    averageHoursPerDay: 8,
+                    workingDaysLeft: 5,
+                    monthHours: 160
+                )
+            )
+            .previewDisplayName("Half Daily Goal - Acessory")
+            .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
+
+            EHMDailyHoursWidgetView(
+                entry: EHMWidgetEntry(
+                    date: Date(),
+                    groupedTimeEntries: GroupedTimeEntry.fakeGroupedData(totalHours: 8),
+                    averageHoursPerDay: 8,
+                    workingDaysLeft: 5,
+                    monthHours: 160
+                )
+            )
+            .previewDisplayName("Goal Reached - Acessory")
+            .previewContext(WidgetPreviewContext(family: .accessoryCircular))
+
+            EHMDailyHoursWidgetView(
+                entry: EHMWidgetEntry(
+                    date: Date(),
+                    groupedTimeEntries: GroupedTimeEntry.fakeGroupedData(totalHours: 10),
+                    averageHoursPerDay: 8,
+                    workingDaysLeft: 5,
+                    monthHours: 160
+                )
+            )
+            .previewDisplayName("Exceeding Daily Goal  - Acessory")
             .previewContext(WidgetPreviewContext(family: .accessoryInline))
         }
     }

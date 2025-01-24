@@ -46,6 +46,7 @@ class DataManager: ObservableObject {
 
     // MARK: - Public Methods
     func fetchData() async throws {
+        guard !isLoading else { return }
         isLoading = true
         
         self.currentUser = try await provider.fetchCurrentUser()

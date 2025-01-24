@@ -21,6 +21,7 @@ struct WidgetProvider: TimelineProvider {
     func getSnapshot(in context: Context, completion: @escaping (EHMWidgetEntry) -> Void) {
         // Provide a snapshot using saved widget data
         let entry = WidgetDataStorage.shared.loadWidgetData()
+        print("Getting snapshot \(entry)")
         completion(entry)
     }
     
@@ -28,6 +29,7 @@ struct WidgetProvider: TimelineProvider {
         // Fetch the latest data and create a timeline
         let entry = WidgetDataStorage.shared.loadWidgetData()
         let timeline = Timeline(entries: [entry], policy: .atEnd)
+        print("Getting timeline \(timeline)")
         completion(timeline)
     }
 }

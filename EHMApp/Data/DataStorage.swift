@@ -12,7 +12,7 @@ import KeychainSwift
 class DataStorage {
     
     static let shared = DataStorage()
-    private let sharedDefaults = UserDefaults(suiteName: "group.com.mangayo.ehm")
+    private let sharedDefaults = UserDefaults(suiteName: "group.com.occhipinti.ehm")
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
     

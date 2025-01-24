@@ -9,7 +9,7 @@ import Foundation
 class WidgetDataStorage {
     
     static let shared = WidgetDataStorage()
-    private let sharedDefaults = UserDefaults(suiteName: "group.com.mangayo.ehm")
+    private let sharedDefaults = UserDefaults(suiteName: "group.com.occhipinti.ehm")
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
     
@@ -17,7 +17,6 @@ class WidgetDataStorage {
     
     // MARK: - Load Data
     func loadWidgetData() -> EHMWidgetEntry {
-        
         let chartData: [GroupedTimeEntry] = {
             if let data = sharedDefaults?.data(forKey: SharedKeys.chartData),
                let decoded = try? decoder.decode([GroupedTimeEntry].self, from: data) {
@@ -29,6 +28,8 @@ class WidgetDataStorage {
         let monthHours = sharedDefaults?.double(forKey: SharedKeys.monthHours) ?? 0
         let workingDaysLeft = sharedDefaults?.integer(forKey: SharedKeys.workingDaysLeft) ?? 0
         let averageHoursPerDay = sharedDefaults?.double(forKey: SharedKeys.averageHoursPerDay) ?? 0
+        
+        print("Loaded widget data! \(chartData)")
         
         return EHMWidgetEntry(
             date: Date(),
