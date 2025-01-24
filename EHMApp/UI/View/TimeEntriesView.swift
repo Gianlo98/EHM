@@ -43,7 +43,9 @@ struct TimeEntriesView: View {
                         }
                     }
                     .refreshable {
-                        await viewModel.fetchTimeEntries()
+                        Task {
+                            await viewModel.fetchTimeEntries()
+                        }
                     }
                 }
             }

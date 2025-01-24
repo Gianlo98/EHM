@@ -16,7 +16,10 @@ class TimeEntriesViewModel: ObservableObject {
     private var dataManager: DataManager = DataManager.shared
     
     func fetchTimeEntries() async {
+        guard !isLoading else { return }
         isLoading = true
+        defer { isLoading = false }
+
         error = nil
         
         do {
