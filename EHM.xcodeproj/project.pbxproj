@@ -11,6 +11,7 @@
 		E91FB7172D3A9148004972C4 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9ADEBF32A34BDA100FD1BAA /* SwiftUI.framework */; };
 		E91FB7262D3A914A004972C4 /* EHMWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E91FB7152D3A9148004972C4 /* EHMWidgetExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E936A6CD2B78242600DAEC4B /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E936A6CC2B78242600DAEC4B /* KeychainSwift */; };
+		E96B12A02D43EEA600ABE714 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96B129F2D43EEA300ABE714 /* TestData.swift */; };
 		EE1CC0E72986D44000B643D0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE1CC0E62986D44000B643D0 /* Preview Assets.xcassets */; };
 		EE1CC0F62986D44000B643D0 /* ehmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1CC0F52986D44000B643D0 /* ehmTests.swift */; };
 		EE1CC1002986D44000B643D0 /* ehmUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1CC0FF2986D44000B643D0 /* ehmUITests.swift */; };
@@ -62,6 +63,7 @@
 		E91FB7272D3A914A004972C4 /* EHMWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EHMWidgetExtension.entitlements; sourceTree = "<group>"; };
 		E91FB72F2D3AA2CE004972C4 /* ehm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ehm.entitlements; path = ehm/ehm.entitlements; sourceTree = "<group>"; };
 		E96B11B42D3E93C700ABE714 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = ehm/Info.plist; sourceTree = "<group>"; };
+		E96B129F2D43EEA300ABE714 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		E9ADEBF12A34BDA100FD1BAA /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E9ADEBF32A34BDA100FD1BAA /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		EE1CC0DC2986D43F00B643D0 /* ehm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ehm.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -175,6 +177,7 @@
 		EE1CC0E52986D44000B643D0 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				E96B129F2D43EEA300ABE714 /* TestData.swift */,
 				EE1CC0E62986D44000B643D0 /* Preview Assets.xcassets */,
 				EE1CC11C2986DA1F00B643D0 /* TestData.swift */,
 				EE1CC1252986E31900B643D0 /* FakeRedmineDownloader.swift */,
@@ -382,6 +385,7 @@
 			files = (
 				EE1CC12C2986E51800B643D0 /* FakeRedmineDownloader.swift in Sources */,
 				EE1CC1282986E35C00B643D0 /* TestData.swift in Sources */,
+				E96B12A02D43EEA600ABE714 /* TestData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
