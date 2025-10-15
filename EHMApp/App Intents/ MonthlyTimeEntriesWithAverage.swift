@@ -4,10 +4,10 @@ import OSLog
 
 struct MonthlyTimeEntriesWithAverage: AppIntent {
     
-    static var title: LocalizedStringResource = "Get how many hours did I work this month and the average hours per day left this month."
-    static var description = IntentDescription("Returns the number of hours of work this month and calculates average hours per remaining day to meet the monthly threshold.")
+    static let title: LocalizedStringResource = "Get how many hours did I work this month and the average hours per day left this month."
+    static let description = IntentDescription("Returns the number of hours of work this month and calculates average hours per remaining day to meet the monthly threshold.")
 
-    static var openAppWhenRun: Bool = false
+    static let openAppWhenRun: Bool = false
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<Double> {

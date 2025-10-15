@@ -16,6 +16,7 @@ struct AbsoluteLineChart: View {
     @State private var showSymbols = false
     @State private var fixedCosts: Double = 0
     @State private var hourlyIncome: Double = 0
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     var body: some View {
         let maxValue = chartData.max(by: { $0.value < $1.value })?.value ?? 0
@@ -60,7 +61,7 @@ struct AbsoluteLineChart: View {
             }
         }
         .chartYScale(domain: 0...yAxisUpperBound)
-        .frame(height: UIScreen.main.bounds.height >= 812 ? 200 : 100)
+        .frame(height: (verticalSizeClass == .regular) ? 200 : 100)
         .padding()
         .refreshable {
             reloadSettings()
@@ -68,9 +69,13 @@ struct AbsoluteLineChart: View {
         .task {
             reloadSettings()
         }.onAppear {
-            reloadSettings()
-            NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { _ in
+            Task { @MainActor in
                 reloadSettings()
+            }
+            NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { _ in
+                Task { @MainActor in
+                    reloadSettings()
+                }
             }
         }
         .onDisappear {
@@ -85,6 +90,7 @@ struct AbsoluteLineChart: View {
 
 extension AbsoluteLineChart {
     
+    @MainActor
     func reloadSettings() {
         self.fixedCosts = DataStorage.shared.loadKey(key: .fixedCostThreshold)
         self.hourlyIncome = DataStorage.shared.loadKey(key: .hourlyIncome)
@@ -106,5 +112,4 @@ struct AbsoluteLineChart_Preview: PreviewProvider {
             }
     }
 }
-
 

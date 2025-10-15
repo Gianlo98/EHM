@@ -8,12 +8,13 @@
 import Foundation
 import OSLog
 
-class RedmineHTTPClient {
-    private let downloader: any RedmineDownloader
+actor RedmineHTTPClient {
+    private let downloader: any RedmineDownloader & Sendable
     private let dateFrom: Date
     private let dateTo: Date
-    private var redmineUrl: String {
-        return DataStorage.shared.loadKey(key: .redmineApiUrl)
+
+    func redmineUrl() async -> String {
+        await DataStorage.shared.loadKey(key: .redmineApiUrl)
     }
     
     private lazy var decoder: JSONDecoder = {
@@ -22,11 +23,11 @@ class RedmineHTTPClient {
         return aDecoder
     }()
     
-    convenience init (downloader: any RedmineDownloader = URLSession.shared) {
+    init (downloader: any RedmineDownloader & Sendable = URLSession.shared) {
         self.init(downloader: downloader, dateFrom: Date.now.startOfMonth(), dateTo: Date.now.endOfMonth())
     }
     
-    init(downloader: any RedmineDownloader = URLSession.shared as any RedmineDownloader, dateFrom: Date, dateTo: Date) {
+    init(downloader: any RedmineDownloader & Sendable = URLSession.shared as any RedmineDownloader & Sendable, dateFrom: Date, dateTo: Date) {
         self.downloader = downloader
         self.dateFrom = dateFrom
         self.dateTo = dateTo
@@ -35,11 +36,15 @@ class RedmineHTTPClient {
     
     var timeEntries: [RedmineTimeEntry] {
         get async throws {
-            guard redmineUrl != "" else {
+            let _redmineUrl = await redmineUrl()
+            guard _redmineUrl != "" else {
                 throw RedmineError.missingCredentials
             }
             
-            Logger.providerLogger.debug("[RedmineHTTPClient] Fetching from redmine url \(self.redmineUrl, privacy: .private)")
+            Logger.providerLogger.debug("[RedmineHTTPClient] Fetching from redmine url \(_redmineUrl, privacy: .private)")
+            
+            let downloader = self.downloader
+            let decoder = self.decoder
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -56,7 +61,7 @@ class RedmineHTTPClient {
             var timeEntryResult = RedmineTimeEntriesResult.EMPTY
             
             repeat {
-                let urlString = "\(redmineUrl)/time_entries.json?user_id=\(userId)&limit=\(limit)&offset=\(currentOffset)&from=\(fromStr)&to=\(toStr)"
+                let urlString = "\(_redmineUrl)/time_entries.json?user_id=\(userId)&limit=\(limit)&offset=\(currentOffset)&from=\(fromStr)&to=\(toStr)"
                 guard let url = URL(string: urlString) else {
                     throw RedmineError.networkError(comment: "Invalid URL \(urlString)")
                 }
@@ -76,13 +81,18 @@ class RedmineHTTPClient {
     var currentUser: RedmineCurrentUser {
         get async throws {
             // Check if the Redmine URL is empty
-            guard !redmineUrl.isEmpty else {
+            let _redmineUrl = await redmineUrl()
+            guard !_redmineUrl.isEmpty else {
                 throw RedmineError.missingCredentials
             }
             
-            Logger.providerLogger.debug("[RedmineHTTPClient] Fetching current user from \(self.redmineUrl)")
+            Logger.providerLogger.debug("[RedmineHTTPClient] Fetching current user from \(_redmineUrl)")
+            
+            let downloader = self.downloader
+            let decoder = self.decoder
+            
             // Safely unwrap the URL
-            guard let url = URL(string: "\(redmineUrl)/users/current.json") else {
+            guard let url = URL(string: "\(_redmineUrl)/users/current.json") else {
                 throw RedmineError.invalidUrl
             }
             
@@ -107,3 +117,4 @@ extension Date {
         return Calendar.current.date(byAdding: DateComponents(month: 1, day: -1), to: self.startOfMonth())!
     }
 }
+

@@ -9,7 +9,12 @@ extension UITextField {
         toolbar.sizeToFit()
 
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
+        let doneButton: UIBarButtonItem
+        if #available(iOS 26.0, *) {
+            doneButton = UIBarButtonItem(title: "Done", style: .prominent, target: self, action: #selector(self.doneButtonAction))
+        } else {
+            doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
+        }
 
         toolbar.setItems([flexSpace, doneButton], animated: false)
         self.inputAccessoryView = toolbar
@@ -120,3 +125,4 @@ struct DecimalTextField: View {
         #endif
     }
 }
+

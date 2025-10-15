@@ -12,7 +12,6 @@ struct ChartView: View {
     @StateObject var viewModel: ChartViewModel = ChartViewModel()
     
     let backgroundColor = Color(UIColor.secondarySystemBackground)
-    let screenWidth = UIScreen.main.bounds.size.width
     
     var body: some View {
         VStack {
@@ -66,7 +65,7 @@ struct ChartView: View {
         }
     }
 }
-
+#if DEBUG
 struct ChartView_Preview: PreviewProvider {
     static var previews: some View {
         let fakeDownloader = FakeRedmineDownloader(feature: testFeature_te04)
@@ -77,3 +76,4 @@ struct ChartView_Preview: PreviewProvider {
         ChartView()
     }
 }
+#endif

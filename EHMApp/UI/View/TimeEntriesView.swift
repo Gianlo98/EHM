@@ -56,7 +56,7 @@ struct TimeEntriesView: View {
         }
     }
 }
-
+#if DEBUG
 struct TimeEntriesView_Previews: PreviewProvider {
     static var previews: some View {
         let fakeDownloader = FakeRedmineDownloader(feature: testFeature_te04)
@@ -69,4 +69,4 @@ struct TimeEntriesView_Previews: PreviewProvider {
         }
     }
 }
-
+#endif

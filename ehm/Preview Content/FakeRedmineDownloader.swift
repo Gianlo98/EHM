@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FakeRedmineDownloader: RedmineDownloader {
+final class FakeRedmineDownloader: RedmineDownloader, Sendable {
     let feature: Data
     
     func fetch(from: URL) async throws -> Data {
@@ -25,3 +25,4 @@ class FakeRedmineDownloader: RedmineDownloader {
         self.feature = feature
     }
 }
+

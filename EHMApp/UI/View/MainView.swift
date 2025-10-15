@@ -34,7 +34,7 @@ struct MainView: View {
         }
     }
 }
-
+#if DEBUG
 struct MainView_Preview: PreviewProvider {
     static var previews: some View {
         let fakeDownloader = FakeRedmineDownloader(feature: testFeature_te04)
@@ -58,3 +58,5 @@ struct MainView_Preview: PreviewProvider {
         }
     }
 }
+#endif
+

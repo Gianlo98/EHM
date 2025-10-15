@@ -94,7 +94,7 @@ struct SettingsView: View {
         }
     }
 }
-
+#if DEBUG
 struct SettingsView_Preview: PreviewProvider {
     static var previews: some View {
         // Mock Data for Preview
@@ -120,3 +120,4 @@ struct SettingsView_Preview: PreviewProvider {
         
     }
 }
+#endif

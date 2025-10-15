@@ -11,7 +11,18 @@ import Charts
 
 struct RelativeBarChart: View {
     @Binding var chartData: [GroupedTimeEntry]
-    
+
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    private var chartHeight: CGFloat {
+        // Prefer a larger height when we have regular vertical size (e.g., tall iPhones, iPad portrait)
+        if verticalSizeClass == .regular {
+            return 200
+        }
+        // In compact vertical size (e.g., iPhone landscape, small heights), use the smaller height
+    return 200
+    }
 
     var body: some View {
         VStack {
@@ -45,7 +56,7 @@ struct RelativeBarChart: View {
                     }
                 }
             }
-            .frame(height: UIScreen.main.bounds.height >= 812 ? 200 : 100)
+            .frame(height: chartHeight)
             .padding(.trailing, 20)
         }
     }

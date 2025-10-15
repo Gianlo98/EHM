@@ -74,14 +74,19 @@ class RedmineTimeEntriesProvider: ObservableObject {
     }
     
     func setDateFrom(date: Date) async throws {
-        self.dateFrom = date
+        await MainActor.run {
+            self.dateFrom = date
+        }
 //        self.client = RedmineHTTPClient(dateFrom: self.dateFrom, dateTo: self.dateTo)
 //        try await fetchTimeEntries()
     }
     
     func setDateTo(date: Date) async throws {
-        self.dateTo = date
+        await MainActor.run {
+            self.dateTo = date
+        }
 //        self.client = RedmineHTTPClient(dateFrom: self.dateFrom, dateTo: self.dateTo)
 //        try await fetchTimeEntries()
     }
 }
+

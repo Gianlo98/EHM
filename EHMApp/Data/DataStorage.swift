@@ -9,6 +9,7 @@ import Foundation
 import WidgetKit
 import KeychainSwift
 
+@MainActor
 class DataStorage {
     
     static let shared = DataStorage()
@@ -61,3 +62,4 @@ class DataStorage {
         }
     }
 }
+

@@ -52,10 +52,15 @@ class SettingsViewModel: ObservableObject {
             Task {
                 do {
                     try await dataManager.fetchData()
-                    let user = dataManager.currentUser!
-                    userFetchMessage = "User found: \(user.firstname) \(user.lastname)"
-                    userFetchMessageColor = .primary
-                    completion(true) // Indicate success
+                    if let user = dataManager.currentUser {
+                        userFetchMessage = "User found: \(user.firstname) \(user.lastname)"
+                        userFetchMessageColor = .primary
+                        completion(true) // Indicate success
+                    } else {
+                        userFetchMessage = "No user found. Please check your credentials."
+                        userFetchMessageColor = .red
+                        completion(false)
+                    }
                 } catch {
                     userFetchMessage = "Failed to fetch user."
                     userFetchMessageColor = .red
@@ -69,6 +74,6 @@ class SettingsViewModel: ObservableObject {
     }
     
     func setDateTo(date: Date) {
-        DataManager.shared.dateFrom = date
+        DataManager.shared.dateTo = date
     }
 }
